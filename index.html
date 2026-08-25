@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>اختبار السواقة النظري - الأردن</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== HOME SCREEN ===================== -->
+<section id="screen-home" class="screen active">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="app-title">الاختبار النظري لرخصة القيادة</h1>
+      <button id="btn-reset-all" class="icon-btn" title="إعادة تعيين كل التقدم" aria-label="إعادة تعيين">↺</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="stats-row" id="overall-stats"></div>
+
+    <div class="levels-grid" id="levels-grid"></div>
+
+    <p class="footnote">60 سؤال لكل مستوى &middot; يسمح بـ 5 أخطاء كحد أقصى للنجاح</p>
+  </main>
+</section>
+
+<!-- ===================== QUIZ SCREEN ===================== -->
+<section id="screen-quiz" class="screen">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button id="btn-exit-quiz" class="icon-btn" aria-label="رجوع">✕</button>
+      <div class="quiz-heading">
+        <span id="quiz-level-title">المستوى</span>
+        <span id="quiz-progress-text" class="muted">1 / 60</span>
+      </div>
+      <button id="btn-finish-early" class="text-btn">إنهاء</button>
+    </div>
+    <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+  </header>
+
+  <main class="content quiz-content">
+    <div class="question-card">
+      <div class="q-number" id="q-number">السؤال 1</div>
+      <p class="q-text" id="q-text"></p>
+      <div class="q-image-wrap" id="q-image-wrap" hidden>
+        <img id="q-image" alt="صورة توضيحية للسؤال">
+      </div>
+      <div class="options-list" id="options-list"></div>
+    </div>
+  </main>
+
+  <footer class="quiz-nav">
+    <button id="btn-prev" class="btn btn-secondary">السابق</button>
+    <button id="btn-next" class="btn btn-primary">التالي</button>
+  </footer>
+</section>
+
+<!-- ===================== RESULTS SCREEN ===================== -->
+<section id="screen-results" class="screen">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1 class="app-title">النتيجة</h1>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="result-banner" id="result-banner">
+      <div class="result-icon" id="result-icon">✓</div>
+      <div class="result-title" id="result-title">ناجح</div>
+      <div class="result-sub" id="result-sub"></div>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-box">
+        <div class="score-num" id="score-correct">0</div>
+        <div class="score-label">إجابات صحيحة</div>
+      </div>
+      <div class="score-box">
+        <div class="score-num score-num-bad" id="score-wrong">0</div>
+        <div class="score-label">إجابات خاطئة</div>
+      </div>
+      <div class="score-box">
+        <div class="score-num" id="score-allowed">5</div>
+        <div class="score-label">الحد المسموح للأخطاء</div>
+      </div>
+    </div>
+
+    <div class="chip-grid" id="chip-grid"></div>
+
+    <div class="result-actions">
+      <button id="btn-review-wrong" class="btn btn-secondary">مراجعة الأخطاء</button>
+      <button id="btn-retake" class="btn btn-primary">إعادة المحاولة</button>
+    </div>
+    <button id="btn-results-home" class="btn btn-ghost btn-block">الرئيسية</button>
+
+    <div class="review-section" id="review-section" hidden>
+      <h2 class="review-heading">مراجعة الإجابات الخاطئة</h2>
+      <div id="review-list"></div>
+    </div>
+  </main>
+</section>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
