@@ -33,6 +33,19 @@
     return LEVELS.find(function (l) { return l.id === id; });
   }
 
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function shuffleQuestions(questions) {
+    return shuffle(questions);
+  }
+
   /* ---------------- screen switching ---------------- */
   function showScreen(id) {
     document.querySelectorAll(".screen").forEach(function (s) {
@@ -134,6 +147,7 @@
 
   /* ---------------- QUIZ ---------------- */
   var currentLevelId = null;
+  var currentQuestions = null;
   var currentAnswers = null;
   var currentIndex = 0;
 
@@ -142,12 +156,14 @@
     var lp = getLevelProgress(levelId);
 
     if (resume && lp.inProgress) {
+      currentQuestions = lp.inProgress.questions;
       currentAnswers = lp.inProgress.answers.slice();
       currentIndex = lp.inProgress.current || 0;
     } else {
-      currentAnswers = new Array(level.questions.length).fill(null);
+      currentQuestions = shuffleQuestions(level.questions);
+      currentAnswers = new Array(currentQuestions.length).fill(null);
       currentIndex = 0;
-      setLevelProgress(levelId, { last: lp.last, inProgress: { answers: currentAnswers, current: 0 } });
+      setLevelProgress(levelId, { last: lp.last, inProgress: { questions: currentQuestions, answers: currentAnswers, current: 0 } });
     }
     currentLevelId = levelId;
     document.getElementById("quiz-level-title").textContent = "المستوى " + levelId;
@@ -157,13 +173,12 @@
 
   function persistInProgress() {
     var lp = getLevelProgress(currentLevelId);
-    setLevelProgress(currentLevelId, { last: lp.last, inProgress: { answers: currentAnswers, current: currentIndex } });
+    setLevelProgress(currentLevelId, { last: lp.last, inProgress: { questions: currentQuestions, answers: currentAnswers, current: currentIndex } });
   }
 
   function renderQuestion() {
-    var level = findLevel(currentLevelId);
-    var q = level.questions[currentIndex];
-    var total = level.questions.length;
+    var q = currentQuestions[currentIndex];
+    var total = currentQuestions.length;
 
     document.getElementById("quiz-progress-text").textContent = (currentIndex + 1) + " / " + total;
     document.getElementById("progress-fill").style.width = (((currentIndex + 1) / total) * 100) + "%";
@@ -217,8 +232,7 @@
   });
 
   document.getElementById("btn-next").addEventListener("click", function () {
-    var level = findLevel(currentLevelId);
-    var isLast = currentIndex === level.questions.length - 1;
+    var isLast = currentIndex === currentQuestions.length - 1;
     if (isLast) {
       var unanswered = currentAnswers.filter(function (a) { return a === null; }).length;
       if (unanswered > 0) {
@@ -254,18 +268,18 @@
   });
 
   function finishQuiz() {
-    var level = findLevel(currentLevelId);
-    var total = level.questions.length;
+    var total = currentQuestions.length;
     var wrongIdxs = [];
     var skippedIdxs = [];
     currentAnswers.forEach(function (a, i) {
       if (a === null) { skippedIdxs.push(i); wrongIdxs.push(i); }
-      else if (a !== level.questions[i].correct) { wrongIdxs.push(i); }
+      else if (a !== currentQuestions[i].correct) { wrongIdxs.push(i); }
     });
     var wrong = wrongIdxs.length;
     var correct = total - wrong;
     var allowed = allowedWrong(total);
     var result = {
+      questions: currentQuestions,
       answers: currentAnswers.slice(),
       wrongIdxs: wrongIdxs,
       skippedIdxs: skippedIdxs,
@@ -284,7 +298,6 @@
 
   /* ---------------- RESULTS ---------------- */
   function renderResults(levelId, result) {
-    var level = findLevel(levelId);
     var banner = document.getElementById("result-banner");
     banner.className = "result-banner " + (result.passed ? "pass" : "fail");
     document.getElementById("result-icon").textContent = result.passed ? "✓" : "✕";
@@ -317,18 +330,18 @@
     }
 
     document.getElementById("btn-review-wrong").style.display = result.wrong > 0 ? "block" : "none";
-    buildReviewList(level, result);
+    buildReviewList(result);
 
     document.getElementById("btn-retake").onclick = function () { beginLevel(levelId, false); };
   }
 
-  function buildReviewList(level, result) {
+  function buildReviewList(result) {
     var container = document.getElementById("review-list");
     container.innerHTML = "";
     if (result.wrong === 0) return;
 
     result.wrongIdxs.forEach(function (qIdx) {
-      var q = level.questions[qIdx];
+      var q = result.questions[qIdx];
       var userAnswer = result.answers[qIdx];
       var item = document.createElement("div");
       item.className = "review-item";
