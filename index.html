@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>اختبار السواقة النظري - الأردن</title>
+<title>إشارة — الاختبار النظري لرخصة القيادة الأردنية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,8 +15,14 @@
 <section id="screen-home" class="screen active">
   <header class="topbar">
     <div class="topbar-inner">
-      <h1 class="app-title">الاختبار النظري لرخصة القيادة</h1>
-      <button id="btn-reset-all" class="icon-btn" title="إعادة تعيين كل التقدم" aria-label="إعادة تعيين">↺</button>
+      <div class="brand">
+        <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="10" fill="#1c2024"/>
+          <path d="M16 9L24 23H8L16 9Z" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+          <circle cx="16" cy="18" r="1.6" fill="#0090ff"/>
+        </svg>
+        <span class="brand-name">إشارة</span>
+      </div>
     </div>
   </header>
 
@@ -22,7 +31,23 @@
 
     <div class="levels-grid" id="levels-grid"></div>
 
-    <p class="footnote">60 سؤال لكل مستوى &middot; يسمح بـ 5 أخطاء كحد أقصى للنجاح</p>
+    <p class="footnote">60 سؤال لكل مستوى &middot; يسمح بـ 7 أخطاء كحد أقصى للنجاح</p>
+
+    <footer class="site-footer">
+      <div class="footer-brand">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="10" fill="#1c2024"/>
+          <path d="M16 9L24 23H8L16 9Z" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+          <circle cx="16" cy="18" r="1.6" fill="#0090ff"/>
+        </svg>
+        <span class="footer-brand-name">إشارة</span>
+      </div>
+      <p class="footer-tagline">تدرب على امتحان السواقة النظري الأردني... بدون إعلانات.</p>
+      <div class="footer-links">
+        <button id="btn-reset-all" class="footer-link">إعادة تعيين كل التقدم</button>
+      </div>
+      <p class="footer-credit">570 سؤال &middot; 10 مستويات &middot; جميع الأسئلة والصور من المصدر الرسمي</p>
+    </footer>
   </main>
 </section>
 
@@ -82,7 +107,7 @@
         <div class="score-label">إجابات خاطئة</div>
       </div>
       <div class="score-box">
-        <div class="score-num" id="score-allowed">5</div>
+        <div class="score-num" id="score-allowed">7</div>
         <div class="score-label">الحد المسموح للأخطاء</div>
       </div>
     </div>

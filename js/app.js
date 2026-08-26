@@ -26,7 +26,7 @@
   }
 
   function allowedWrong(total) {
-    return Math.max(1, Math.round((total * 5) / 60));
+    return Math.max(1, Math.round((total * 7) / 60));
   }
 
   function findLevel(id) {
@@ -207,6 +207,15 @@
       div.addEventListener("click", function () {
         currentAnswers[currentIndex] = idx;
         persistInProgress();
+
+        var allowed = allowedWrong(currentQuestions.length);
+        var wrongSoFar = currentAnswers.filter(function (a, i) {
+          return a !== null && a !== currentQuestions[i].correct;
+        }).length;
+        if (wrongSoFar > allowed) {
+          finishQuiz(currentIndex + 1, true);
+          return;
+        }
         renderQuestion();
       });
       list.appendChild(div);
@@ -267,20 +276,22 @@
     if (confirm(msg)) finishQuiz();
   });
 
-  function finishQuiz() {
-    var total = currentQuestions.length;
+  function finishQuiz(limit, stoppedEarly) {
+    var total = limit || currentQuestions.length;
+    var qs = currentQuestions.slice(0, total);
+    var answers = currentAnswers.slice(0, total);
     var wrongIdxs = [];
     var skippedIdxs = [];
-    currentAnswers.forEach(function (a, i) {
+    answers.forEach(function (a, i) {
       if (a === null) { skippedIdxs.push(i); wrongIdxs.push(i); }
-      else if (a !== currentQuestions[i].correct) { wrongIdxs.push(i); }
+      else if (a !== qs[i].correct) { wrongIdxs.push(i); }
     });
     var wrong = wrongIdxs.length;
     var correct = total - wrong;
-    var allowed = allowedWrong(total);
+    var allowed = allowedWrong(currentQuestions.length);
     var result = {
-      questions: currentQuestions,
-      answers: currentAnswers.slice(),
+      questions: qs,
+      answers: answers,
       wrongIdxs: wrongIdxs,
       skippedIdxs: skippedIdxs,
       correct: correct,
@@ -288,6 +299,7 @@
       total: total,
       allowed: allowed,
       passed: wrong <= allowed,
+      stoppedEarly: !!stoppedEarly,
       date: new Date().toISOString()
     };
     setLevelProgress(currentLevelId, { last: result, inProgress: null });
@@ -302,8 +314,9 @@
     banner.className = "result-banner " + (result.passed ? "pass" : "fail");
     document.getElementById("result-icon").textContent = result.passed ? "✓" : "✕";
     document.getElementById("result-title").textContent = result.passed ? "ناجح" : "راسب";
-    document.getElementById("result-sub").textContent =
-      "المستوى " + levelId + " - " + result.correct + " من " + result.total + " إجابة صحيحة";
+    document.getElementById("result-sub").textContent = result.stoppedEarly
+      ? "توقف الاختبار بعد الوصول إلى الحد الأقصى من الأخطاء (" + result.wrong + " أخطاء)"
+      : "المستوى " + levelId + " - " + result.correct + " من " + result.total + " إجابة صحيحة";
 
     document.getElementById("score-correct").textContent = result.correct;
     document.getElementById("score-wrong").textContent = result.wrong;
