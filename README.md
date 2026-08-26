@@ -7,26 +7,31 @@ No install, no build step, no server required — just open `index.html`.
 ## Screenshots
 
 ### Home — levels overview
+
 Tracks your last result and progress per level: pass/fail with wrong-answer count, or resume an in-progress attempt.
 
 ![Home screen](screenshots/home.png)
 
 ### Quiz — road-sign question
+
 Road-sign questions show the actual sign image extracted from the source material.
 
 ![Quiz with image](screenshots/quiz-sign.png)
 
 ### Quiz — text question
+
 Plain questions render cleanly with no leftover image placeholder.
 
 ![Quiz text only](screenshots/quiz-text.png)
 
 ### Results
+
 Nothing is revealed until you finish — just like the real exam. Then you get a pass/fail verdict, your score, and a color-coded map of all 60 questions.
 
 ![Results screen](screenshots/results-fail.png)
 
 ### Review
+
 Jump into any wrong answer to see exactly what you picked versus the correct answer.
 
 ![Review wrong answers](screenshots/review.png)
@@ -48,12 +53,12 @@ Just open [`index.html`](index.html) in a browser. Everything (styles, script, q
 
 The question bank was extracted from four source Word documents (~150–160 questions each, with overlap between them). After parsing, de-duplicating, and dropping the handful of questions where the source never marked a clear correct answer, 570 unique verified questions remained:
 
-| | |
-|---|---|
-| Total questions | 570 |
-| Levels | 10 (9 × 60 + 1 × 30) |
-| Questions with a road-sign image | 282 |
-| Pass threshold | 5 wrong (scaled proportionally for the 30-question level) |
+|                                  |                                                           |
+| -------------------------------- | --------------------------------------------------------- |
+| Total questions                  | 570                                                       |
+| Levels                           | 10 (9 × 60 + 1 × 30)                                      |
+| Questions with a road-sign image | 282                                                       |
+| Pass threshold                   | 5 wrong (scaled proportionally for the 30-question level) |
 
 ## Project structure
 
