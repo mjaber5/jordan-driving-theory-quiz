@@ -267,6 +267,30 @@ button { font-family: inherit; }
   margin-bottom: 8px;
 }
 
+.q-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.q-head .q-number { margin-bottom: 0; }
+
+.hint-btn {
+  border: 1px solid var(--mist);
+  background: var(--canvas);
+  color: var(--deep-signal);
+  border-radius: var(--radius-btn);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.hint-btn:hover { background: var(--signal-tint); }
+.hint-btn:active { transform: scale(0.97); }
+
 .q-text {
   font-size: 18px;
   font-weight: 600;
@@ -349,6 +373,27 @@ button { font-family: inherit; }
 }
 .option.wrong .opt-dot { border-color: var(--danger); background: var(--danger); }
 .option.dim { opacity: 0.6; background: var(--canvas); }
+
+/* When the hint is on, keep the user's pick visible: a thicker border ring
+   (inset, so the layout doesn't shift) and bolder text. */
+.option.selected.correct { box-shadow: inset 0 0 0 1px var(--success); font-weight: 600; }
+.option.selected.wrong { box-shadow: inset 0 0 0 1px var(--danger); font-weight: 600; }
+
+/* ✓ / ✕ marker used by the review list and by the in-quiz hint */
+.opt-icon {
+  font-size: 12px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--canvas);
+}
+.option.correct .opt-icon { background: var(--success); }
+.option.wrong .opt-icon { background: var(--danger); }
 
 .quiz-nav {
   position: sticky;
@@ -445,20 +490,6 @@ button { font-family: inherit; }
 .review-item .q-number { margin-bottom: 6px; }
 .review-item .q-text { font-size: 16px; margin-bottom: 12px; }
 .review-item .options-list .option { cursor: default; }
-.review-item .opt-icon {
-  font-size: 12px;
-  font-weight: 700;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: var(--canvas);
-}
-.review-item .option.correct .opt-icon { background: var(--success); }
-.review-item .option.wrong .opt-icon { background: var(--danger); }
 
 /* ---------- Footer ---------- */
 .site-footer {

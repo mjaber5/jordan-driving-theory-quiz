@@ -3,6 +3,11 @@
 
   var STORAGE_KEY = "jdt_progress_v1";
 
+  /* Exam rules: a full level is 60 questions and up to 9 wrong answers are
+     allowed. Shorter levels (the 30-question bonus round) scale proportionally. */
+  var QUESTIONS_PER_EXAM = 60;
+  var MAX_WRONG_PER_EXAM = 9;
+
   /* ---------------- storage helpers ---------------- */
   function loadProgress() {
     try {
@@ -26,7 +31,7 @@
   }
 
   function allowedWrong(total) {
-    return Math.max(1, Math.round((total * 7) / 60));
+    return Math.max(1, Math.round((total * MAX_WRONG_PER_EXAM) / QUESTIONS_PER_EXAM));
   }
 
   function findLevel(id) {
@@ -62,6 +67,9 @@
       var lp = progress[l.id];
       return lp && lp.last && lp.last.passed;
     }).length;
+
+    document.getElementById("footnote").textContent =
+      QUESTIONS_PER_EXAM + " سؤال لكل مستوى · يسمح بـ " + MAX_WRONG_PER_EXAM + " أخطاء كحد أقصى للنجاح";
 
     var statsEl = document.getElementById("overall-stats");
     statsEl.innerHTML =
@@ -149,6 +157,7 @@
   var currentLevelId = null;
   var currentQuestions = null;
   var currentAnswers = null;
+  var currentHints = null; // per question: true once the user revealed the hint
   var currentIndex = 0;
 
   function beginLevel(levelId, resume) {
@@ -159,11 +168,17 @@
       currentQuestions = lp.inProgress.questions;
       currentAnswers = lp.inProgress.answers.slice();
       currentIndex = lp.inProgress.current || 0;
+      // Attempts saved before hints existed have no `hints` array.
+      var savedHints = lp.inProgress.hints;
+      currentHints = Array.isArray(savedHints) && savedHints.length === currentQuestions.length
+        ? savedHints.slice()
+        : new Array(currentQuestions.length).fill(false);
     } else {
       currentQuestions = shuffleQuestions(level.questions);
       currentAnswers = new Array(currentQuestions.length).fill(null);
+      currentHints = new Array(currentQuestions.length).fill(false);
       currentIndex = 0;
-      setLevelProgress(levelId, { last: lp.last, inProgress: { questions: currentQuestions, answers: currentAnswers, current: 0 } });
+      setLevelProgress(levelId, { last: lp.last, inProgress: { questions: currentQuestions, answers: currentAnswers, hints: currentHints, current: 0 } });
     }
     currentLevelId = levelId;
     document.getElementById("quiz-level-title").textContent = "المستوى " + levelId;
@@ -173,7 +188,7 @@
 
   function persistInProgress() {
     var lp = getLevelProgress(currentLevelId);
-    setLevelProgress(currentLevelId, { last: lp.last, inProgress: { questions: currentQuestions, answers: currentAnswers, current: currentIndex } });
+    setLevelProgress(currentLevelId, { last: lp.last, inProgress: { questions: currentQuestions, answers: currentAnswers, hints: currentHints, current: currentIndex } });
   }
 
   function renderQuestion() {
@@ -197,13 +212,23 @@
       img.removeAttribute("src");
     }
 
+    var hinted = currentHints[currentIndex] === true;
+    document.getElementById("btn-hint").textContent = hinted ? "إخفاء التلميح" : "تلميح";
+
     var list = document.getElementById("options-list");
     list.innerHTML = "";
     q.opts.forEach(function (optText, idx) {
       var div = document.createElement("div");
       div.className = "option";
       if (currentAnswers[currentIndex] === idx) div.classList.add("selected");
-      div.innerHTML = '<span>' + escapeHtml(optText) + '</span><span class="opt-dot"></span>';
+
+      var marker = '<span class="opt-dot"></span>';
+      if (hinted) {
+        var isCorrect = idx === q.correct;
+        div.classList.add(isCorrect ? "correct" : "wrong");
+        marker = '<span class="opt-icon">' + (isCorrect ? "✓" : "✕") + '</span>';
+      }
+      div.innerHTML = '<span>' + escapeHtml(optText) + '</span>' + marker;
       div.addEventListener("click", function () {
         currentAnswers[currentIndex] = idx;
         persistInProgress();
@@ -231,6 +256,12 @@
     d.textContent = str;
     return d.innerHTML;
   }
+
+  document.getElementById("btn-hint").addEventListener("click", function () {
+    currentHints[currentIndex] = !currentHints[currentIndex];
+    persistInProgress();
+    renderQuestion();
+  });
 
   document.getElementById("btn-prev").addEventListener("click", function () {
     if (currentIndex > 0) {

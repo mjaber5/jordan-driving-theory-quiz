@@ -31,7 +31,7 @@
 
     <div class="levels-grid" id="levels-grid"></div>
 
-    <p class="footnote">60 سؤال لكل مستوى &middot; يسمح بـ 7 أخطاء كحد أقصى للنجاح</p>
+    <p class="footnote" id="footnote"></p>
 
     <footer class="site-footer">
       <div class="footer-brand">
@@ -67,7 +67,10 @@
 
   <main class="content quiz-content">
     <div class="question-card">
-      <div class="q-number" id="q-number">السؤال 1</div>
+      <div class="q-head">
+        <div class="q-number" id="q-number">السؤال 1</div>
+        <button id="btn-hint" class="hint-btn" type="button">تلميح</button>
+      </div>
       <p class="q-text" id="q-text"></p>
       <div class="q-image-wrap" id="q-image-wrap" hidden>
         <img id="q-image" alt="صورة توضيحية للسؤال">
@@ -107,7 +110,7 @@
         <div class="score-label">إجابات خاطئة</div>
       </div>
       <div class="score-box">
-        <div class="score-num" id="score-allowed">7</div>
+        <div class="score-num" id="score-allowed">9</div>
         <div class="score-label">الحد المسموح للأخطاء</div>
       </div>
     </div>
