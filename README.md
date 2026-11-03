@@ -1,6 +1,6 @@
 # إشارة (Ishara) — Jordan Driving Theory Exam Practice
 
-A quiz website for practicing the Jordanian theoretical driving license exam. Built from a bank of **570 verified questions** (including road-sign images), split into **10 levels of 60 questions** to match the real exam format: 60 questions per attempt, up to **7 wrong answers** allowed — the exam stops immediately and marks you failed the moment an 8th wrong answer lands.
+A quiz website for practicing the Jordanian theoretical driving license exam. Built from a bank of **570 verified questions** (including road-sign images), split into **10 levels of 60 questions** to match the real exam format: 60 questions per attempt, up to **9 wrong answers** allowed — the exam stops immediately and marks you failed the moment a 10th wrong answer lands.
 
 No build step, no backend, no ads — just static HTML, CSS, and JavaScript.
 
@@ -21,8 +21,13 @@ Plain questions render cleanly with no leftover image placeholder.
 
 ![Quiz text only](screenshots/quiz-text.png)
 
+### Quiz — hint
+Stuck? Tap **تلميح** (Hint) on any question to reveal the answer: the correct option turns green with a ✓ and every wrong option turns red with a ✕. Tap again (**إخفاء التلميح**) to hide it. Hints are remembered per question, so they survive Previous/Next and resuming an attempt, and they never change your score — they're a study aid, not part of the exam.
+
+![Quiz with hint revealed](screenshots/quiz-hint.png)
+
 ### Results
-Nothing is revealed until you finish (or fail) — just like the real exam. Then you get a pass/fail verdict, your score, and a color-coded map of every question you reached.
+Unless you ask for a hint, nothing is revealed until you finish (or fail) — just like the real exam. Then you get a pass/fail verdict, your score, and a color-coded map of every question you reached.
 
 ![Results screen](screenshots/results-fail.png)
 
@@ -34,8 +39,9 @@ Jump into any wrong answer to see exactly what you picked versus the correct ans
 ## Features
 
 - **10 levels, 60 questions each** (last level is a 30-question bonus round), matching the real exam's format
-- **7 wrong answers allowed** — an 8th wrong answer ends the attempt immediately and marks it failed, mirroring how the real computerized exam cuts you off
+- **9 wrong answers allowed** — a 10th wrong answer ends the attempt immediately and marks it failed, mirroring how the real computerized exam cuts you off
 - **Exam-realistic flow**: answers aren't revealed question-by-question, only once the attempt ends
+- **Optional hint button** on every question: shows the correct answer (green ✓) and the wrong ones (red ✕) on demand
 - **Randomized question order** every attempt (answer choices stay in their original order)
 - **Full results breakdown**: pass/fail, correct/wrong counts, and a per-question color grid
 - **Answer review**: see your wrong answers next to the correct ones, with the original sign image where relevant
@@ -60,7 +66,7 @@ The question bank was extracted from four source Word documents (~150–160 ques
 | Total questions                   | 570                                                          |
 | Levels                            | 10 (9 × 60 + 1 × 30)                                         |
 | Questions with a road-sign image  | 282                                                          |
-| Pass threshold                    | 7 wrong (scaled proportionally for the 30-question level), 8th wrong ends the attempt |
+| Pass threshold                    | 9 wrong (scaled proportionally for the 30-question level: 5), 10th wrong ends the attempt |
 
 ## Project structure
 
